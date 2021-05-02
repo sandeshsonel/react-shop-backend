@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const serverless = require('serverless-http');
 dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE;
@@ -40,9 +39,9 @@ app.use('/api/v1/cart', cartRoutes);
 // });
 
 // Handling Unhandled Routes
-app.use("*", (req, res, next) => {
+app.use('*', (req, res, next) => {
   res.status(404).json({
-    status: "fail",
+    status: 'fail',
     message: `Can't find ${req.originalUrl} on this server!`,
   });
 });
@@ -63,5 +62,3 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}...`);
 });
-
-module.exports.handler = serverless(app);
