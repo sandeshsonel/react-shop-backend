@@ -1,13 +1,24 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const productController = require("../controllers/productController");
+const authController = require('../controllers/authController');
+const productController = require('../controllers/productController');
 
 router
-  .route("/")
+  .route('/')
   .get(productController.getAllProducts)
-  .post(productController.uploadProductImage, productController.resizeProductImage, productController.createProduct);
+  .post(
+    productController.uploadProductImage,
+    productController.resizeProductImage,
+    productController.createProduct
+  );
 
-router.route("/:id").get(productController.getProduct).patch(productController.updateProduct).delete(productController.deleteProduct);
+router.route('/:gender/:category').get(productController.getProductByQuery);
+
+router
+  .route('/:id')
+  .get(productController.getProduct)
+  .patch(productController.updateProduct)
+  .delete(productController.deleteProduct);
 
 module.exports = router;
