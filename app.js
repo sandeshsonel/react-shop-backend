@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -37,6 +38,11 @@ app.use('/api/v1/cart', cartRoutes);
 //     message: `Can't find ${req.originalUrl} on the server`,
 //   });
 // });
+
+app.get('*', (req, res) => {
+  const index = path.join(__dirname, 'uploads');
+  res.sendFile(index);
+});
 
 // Handling Unhandled Routes
 app.use('*', (req, res, next) => {
