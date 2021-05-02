@@ -86,14 +86,14 @@ exports.getProductByQuery = async (req, res, next) => {
 };
 
 exports.createProduct = async (req, res) => {
-  // const fileName = req.file.filename ? req.file.filename : null;
+  const fileName = req.file.filename ? req.file.filename : null;
   try {
     const product = await Product.create({
       productName: req.body.name,
       description: req.body.description,
       category: req.body.category,
       gender: req.body.gender,
-      // image: fileName,
+      image: fileName,
       price: req.body.price,
       priceDiscount: req.body.priceDiscount,
       sizes: req.body.size,
