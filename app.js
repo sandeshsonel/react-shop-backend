@@ -19,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
-app.use(express.static(`${__dirname}/public`));
+// Serving static files
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
