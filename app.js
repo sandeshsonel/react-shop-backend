@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 // Serving static files
-app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, '/uploads')));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -41,7 +41,7 @@ app.use('/api/v1/cart', cartRoutes);
 // });
 
 app.get('*', (req, res) => {
-  const index = path.join(__dirname, 'uploads');
+  const index = path.join(__dirname, '/uploads');
   res.sendFile(index);
 });
 
