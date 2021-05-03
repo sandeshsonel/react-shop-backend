@@ -6,9 +6,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 exports.getCartItems = async (req, res, next) => {
   try {
-    console.log('xoxo-user', req.user);
     const cartItems = await Cart.find({ userId: req.user._id });
-    console.log(cartItems);
     if (cartItems.length) {
       res.status(200).json({
         status: '1',
@@ -22,9 +20,7 @@ exports.getCartItems = async (req, res, next) => {
         message: 'Your Cart Empty',
       });
     }
-    console.log('cartitem', cartItems);
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: '0',
     });
@@ -33,7 +29,6 @@ exports.getCartItems = async (req, res, next) => {
 
 exports.addCartItem = async (req, res, next) => {
   try {
-    console.log('xoxo', req.body);
     const user = await Cart.find({ userId: req.user._id });
     if (user.length === 0) {
       const cartItem = new Cart({
@@ -82,7 +77,6 @@ exports.addCartItem = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: '0',
       message: err,
@@ -92,23 +86,18 @@ exports.addCartItem = async (req, res, next) => {
 
 exports.deleteCartItem = async (req, res, next) => {
   try {
-    console.log('xoox-user', req.user);
-    console.log('xoxo', req.params);
     const result = await Cart.updateOne(
       { userId: req.user._id },
       { $pull: { items: { productId: ObjectId(req.params.productId) } } }
     );
-    console.log(result);
     const cartItem = await Cart.find({ userId: req.user._id });
-    console.log('xoxo', cartItem, cartItem[0].items);
+
     res.status(201).json({
       status: '1',
       message: 'Cart item delete successfully',
       data: !cartItem[0].items ? [] : cartItem[0].items,
     });
-  } catch (err) {
-    console.log('xoxo-delete', err);
-  }
+  } catch (err) {}
 };
 
 exports.updateCartItem = (req, res, next) => {

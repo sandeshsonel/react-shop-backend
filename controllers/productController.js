@@ -52,7 +52,6 @@ exports.getAllProducts = async (req, res, next) => {
 
 exports.getProduct = async (req, res) => {
   try {
-    console.log(req.params);
     const product = await Product.findById(req.params.id);
 
     res.status(200).json({
@@ -80,9 +79,7 @@ exports.getProductByQuery = async (req, res, next) => {
       results: products.length,
       data: products,
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 exports.createProduct = async (req, res) => {
@@ -115,7 +112,6 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res, next) => {
   try {
-    console.log(req.body, req.params);
   } catch (error) {}
 };
 

@@ -13,15 +13,12 @@ const signToken = (id) => {
 };
 
 exports.signup = async (req, res, next) => {
-  console.log('xoxo', req.body);
   try {
     const newUser = await User.create(req.body);
     const token = signToken(newUser._id);
     // const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
     //   expiresIn: process.env.JWT_EXPIRES_IN,
     // });
-
-    console.log('newUser', newUser);
 
     // return;
     res.status(201).json({
@@ -37,7 +34,6 @@ exports.signup = async (req, res, next) => {
       message: 'User Created Successfully',
     });
   } catch (err) {
-    console.log(err.message);
     res.status(404).json({
       status: '0',
       message: err.message,
@@ -47,7 +43,6 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    console.log('xoxo', req.body);
     const { email, password } = req.body;
 
     // 1) Check if email and password exist
@@ -72,8 +67,6 @@ exports.login = async (req, res, next) => {
     // 3) If everything ok, send token to client
     const token = signToken(user._id);
 
-    console.log('xoxo-sign-user', user);
-
     return res.status(200).json({
       status: '1',
       token,
@@ -86,7 +79,6 @@ exports.login = async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({
       success: '0',
       message: err,
@@ -96,7 +88,6 @@ exports.login = async (req, res, next) => {
 
 exports.protect = async (req, res, next) => {
   try {
-    console.log('xoxoxo', req.headers);
     // 1) Getting Token and check of it's here
     let token;
     if (
@@ -117,7 +108,5 @@ exports.protect = async (req, res, next) => {
     let user = await User.find(ObjectId(decoded.id));
     req.user = user[0];
     next();
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 };
