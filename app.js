@@ -40,10 +40,10 @@ app.use('/api/v1/cart', cartRoutes);
 //   });
 // });
 
-app.get('*', (req, res) => {
-  const index = path.join(__dirname, '/uploads');
-  res.sendFile(index);
-});
+// app.get('*', (req, res) => {
+//   const index = path.join(__dirname, '/uploads');
+//   res.sendFile(index);
+// });
 
 // Handling Unhandled Routes
 app.use('*', (req, res, next) => {
