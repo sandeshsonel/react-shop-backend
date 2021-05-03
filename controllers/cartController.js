@@ -44,6 +44,8 @@ exports.addCartItem = async (req, res, next) => {
           quantity: req.body.quantity,
           size: req.body.selectSize,
           price: req.body.price,
+          priceDiscount: req.body.priceDiscount,
+          selectSize: req.body.selectSize,
         },
       });
       const result = await cartItem.save();
@@ -64,6 +66,9 @@ exports.addCartItem = async (req, res, next) => {
               quantity: req.body.quantity,
               size: req.body.selectSize,
               price: req.body.price,
+              price: req.body.price,
+              priceDiscount: req.body.priceDiscount,
+              selectSize: req.body.selectSize,
             },
           },
         },

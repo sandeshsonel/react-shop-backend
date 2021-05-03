@@ -8,13 +8,13 @@ const itemSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     // required: true,
-    min: [1, 'Quantity can not be less then 1.'],
+    min: 1,
     deafult: 1,
   },
-  size: {
-    type: String,
-    // required: true,
-  },
+  price: Number,
+  priceDiscount: Number,
+  selectSize: String,
+
   price: Number,
   bill: {
     type: Number,
