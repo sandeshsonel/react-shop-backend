@@ -13,7 +13,7 @@ router
     productController.createProduct
   );
 
-// router.route('/:gender/:category').get(productController.getProductByQuery);
+router.route('/:gender/:category').get(productController.getProductByQuery);
 
 router
   .route('/:id')
