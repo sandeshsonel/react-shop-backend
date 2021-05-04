@@ -13,12 +13,16 @@ router
     productController.createProduct
   );
 
-router.route('/:gender/:category').get(productController.getProductByQuery);
+// router.route('/:gender/:category').get(productController.getProductByQuery);
 
 router
   .route('/:id')
   .get(productController.getProduct)
   .patch(productController.updateProduct)
   .delete(productController.deleteProduct);
+
+router
+  .route('/searchQuery/:query')
+  .get(productController.getProductBySearchQuery);
 
 module.exports = router;

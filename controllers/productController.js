@@ -119,3 +119,23 @@ exports.deleteProduct = async (req, res, next) => {
   try {
   } catch (error) {}
 };
+
+exports.getProductBySearchQuery = async (req, res, next) => {
+  try {
+    console.log('xoxo-search-query', req.params);
+    const searchResult = await Product.find({
+      // category: { $regex: req.params.query },
+      category: 'casual-shirts',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getProductBySelectedSearch = async (req, res, next) => {
+  try {
+    console.log('xoxo-search-query');
+  } catch (error) {
+    console.log(error);
+  }
+};
