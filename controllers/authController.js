@@ -14,26 +14,32 @@ const signToken = (id) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    const newUser = await User.create(req.body);
-    const token = signToken(newUser._id);
-    // const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    //   expiresIn: process.env.JWT_EXPIRES_IN,
-    // });
-
-    // return;
-    res.status(201).json({
-      status: '1',
-      token,
-      data: {
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        dateOfBirth: newUser.dateOfBirth,
-        mostlyInterested: newUser.mostlyInterested,
-      },
-      message: 'User Created Successfully',
-    });
+    console.log('xoxox', req.body);
+    const alreadyUser = await User.find({ email: req.body.email });
+    console.log('xoxox', alreadyUser);
+    if (alreadyUser.length) {
+      return res.status(200).json({
+        status: '0',
+        message: 'You already register, Please login',
+      });
+    } else {
+      const newUser = await User.create(req.body);
+      const token = signToken(newUser._id);
+      res.status(201).json({
+        status: '1',
+        token,
+        data: {
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          email: newUser.email,
+          dateOfBirth: newUser.dateOfBirth,
+          mostlyInterested: newUser.mostlyInterested,
+        },
+        message: 'User Created Successfully',
+      });
+    }
   } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: '0',
       message: err.message,
@@ -57,7 +63,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select('+password');
     const correct = user.correctPassword(password, user.password);
 
-    if (!user || !correct) {
+    if (!correct) {
       return res.status(401).json({
         success: '0',
         message: 'Incorrect email or password',

@@ -14,7 +14,9 @@ const itemSchema = new mongoose.Schema({
   price: Number,
   priceDiscount: Number,
   selectSize: String,
-
+  sizes: {
+    type: Array,
+  },
   price: Number,
   bill: {
     type: Number,

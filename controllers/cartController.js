@@ -37,7 +37,7 @@ exports.addCartItem = async (req, res, next) => {
           productId: req.body._id,
           productName: req.body.productName,
           quantity: req.body.quantity,
-          size: req.body.selectSize,
+          sizes: req.body.sizes,
           price: req.body.price,
           priceDiscount: req.body.priceDiscount,
           selectSize: req.body.selectSize,
@@ -51,30 +51,57 @@ exports.addCartItem = async (req, res, next) => {
         data: result.items,
       });
     } else {
-      const result = await Cart.findOneAndUpdate(
-        { userId: req.user._id },
-        {
-          $push: {
-            items: {
-              productId: req.body._id,
-              productName: req.body.productName,
-              quantity: req.body.quantity,
-              size: req.body.selectSize,
-              price: req.body.price,
-              price: req.body.price,
-              priceDiscount: req.body.priceDiscount,
-              selectSize: req.body.selectSize,
+      const existSelectSize = user[0].items.find(
+        (item) => req.body.selectSize === item.selectSize
+      );
+      if (existSelectSize) {
+        if (existSelectSize.quantity >= 5) {
+          return res.status(200).json({
+            status: '0',
+            message: `Sorry we can not another ${existSelectSize.productName} to your bag as you've already added the maximum amount`,
+          });
+        } else {
+          const result = await Cart.findOneAndUpdate(
+            {
+              userId: ObjectId(req.user._id),
+              'items.productId': ObjectId(req.body._id),
+              'items.selectSize': req.body.selectSize,
+            },
+            { $inc: { 'items.$.quantity': 1 } },
+            { new: true }
+          );
+          res.status(201).json({
+            status: '1',
+            message: 'Cart Item Added',
+            data: result.items,
+          });
+        }
+      } else {
+        const result = await Cart.findOneAndUpdate(
+          { userId: req.user._id },
+          {
+            $push: {
+              items: {
+                productId: req.body._id,
+                productName: req.body.productName,
+                quantity: req.body.quantity,
+                sizes: req.body.sizes,
+                price: req.body.price,
+                price: req.body.price,
+                priceDiscount: req.body.priceDiscount,
+                selectSize: req.body.selectSize,
+              },
             },
           },
-        },
-        { upsert: true, new: true }
-      );
+          { upsert: true, new: true }
+        );
 
-      res.status(201).json({
-        status: '1',
-        message: 'Cart Item Added',
-        data: result.items,
-      });
+        res.status(201).json({
+          status: '1',
+          message: 'Cart Item Added',
+          data: result.items,
+        });
+      }
     }
   } catch (err) {
     res.status(500).json({

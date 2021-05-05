@@ -70,6 +70,7 @@ exports.getProduct = async (req, res) => {
 
 exports.getProductByQuery = async (req, res, next) => {
   try {
+    console.log(req.query);
     const queryObj = { ...req.params };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
@@ -85,6 +86,7 @@ exports.getProductByQuery = async (req, res, next) => {
 exports.createProduct = async (req, res) => {
   const fileName = req.file.filename ? req.file.filename : null;
   try {
+    console.log('xoxo-add', req.body);
     const product = await Product.create({
       productName: req.body.name,
       description: req.body.description,
@@ -124,9 +126,24 @@ exports.getProductBySearchQuery = async (req, res, next) => {
   try {
     console.log('xoxo-search-query', req.params);
     const searchResult = await Product.find({
-      // category: { $regex: req.params.query },
-      category: 'casual-shirts',
+      category: { $regex: req.params.query },
+      // category: 'casual-shirts',
     });
+    if (searchResult.length > 0) {
+      const resultMap = [];
+      for (let i = 0; i < searchResult.length; i++) {
+        const find = resultMap.find((r) => r.name === searchResult[i].category);
+        if (!find) {
+          resultMap.push({ name: searchResult[i].category, length: 1 });
+        } else {
+          find.length += 1;
+        }
+      }
+      return res.status(200).json({
+        success: '1',
+        suggestions: resultMap,
+      });
+    }
   } catch (error) {
     console.log(error);
   }
