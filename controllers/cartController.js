@@ -115,7 +115,14 @@ exports.deleteCartItem = async (req, res, next) => {
   try {
     const result = await Cart.updateOne(
       { userId: req.user._id },
-      { $pull: { items: { productId: ObjectId(req.params.productId) } } }
+      {
+        $pull: {
+          items: {
+            productId: ObjectId(req.params.productId),
+            selectSize: req.params.size,
+          },
+        },
+      }
     );
     const cartItem = await Cart.find({ userId: req.user._id });
 

@@ -10,7 +10,7 @@ router
   .post(cartController.addCartItem);
 
 router
-  .route('/:productId')
+  .route('/:productId/:size')
   .all(authController.protect)
   .delete(cartController.deleteCartItem)
   .patch(cartController.updateCartItem);
